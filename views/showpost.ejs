@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Show Post</h1>
+    <div class="postlist"></div>
+    <script>
+
+        function toggle() {
+            const postlist = document.querySelector('.postlist')
+            fetch(`/getpost`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => res.json()).then(data => {
+                data[0].map((d, i) => {
+                    let div = document.createElement('div')
+                    div.innerHTML = `<div class="product-detail d-flex" style="margin: 40px 0px;">
+    <div class="product-image"
+        style="height: 100px; width: 100px;background-image:url(${d.image}); background-repeat: no-repeat; background-size: contain;">
+    </div>
+    <div class="product-info">
+        Name: ${d.title} <br>
+        <div style="visibility: hidden;" class="likearr">
+            {{p.like}}
+        </div>
+        <div class="btn-group">
+            <div class="togglelike" style="margin: 10px;">
+                <button class="addToCartBtn" id=${d._id} onclick=togglike("${d._id}")>${d.like.includes(data[1]) ? "unlike" : "like"}</button >
+            </div >
+        </div >
+    </div >
+</div > `
+                    postlist.append(div)
+                })
+            })
+        }
+
+        toggle()
+
+
+        function togglike(id) {
+            console.log(id)
+            fetch(`like/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => res.json()).then(data => {
+                let likebtn = document.getElementById(id)
+                likebtn.innerHTML = "like" ? "like" : "unlike"
+            }
+            )
+        }
+
+    </script>
+</body>
+
+</html>
