@@ -53,3 +53,5 @@ mongoose.connect(process.env.MONGODB_URL).then(() => {
     console.log("Server is running on port", process.env.PORT || 3000);
   });
 });
+
+module.exports = app;
