@@ -8,24 +8,19 @@ passport.use(
     try {
       let user = await User.findOne({ username: username });
       if (!user) {
-        req.flash("error", "Invalid username or password");
         return done(null, false);
       }
       bcrypt.compare(password, user.password, function (err, result) {
         if (err) {
-          req.flash("error", "Invalid username or password");
           return done(err);
         }
         if (result) {
-          req.flash("success", "Successfully logged in");
           return done(null, user);
         }
-        req.flash("error", "Invalid username or password");
         return done(null, false);
       });
     } catch (err) {
       if (err) {
-        req.flash("error", "Internal server error");
         return done(err);
       }
     }

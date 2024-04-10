@@ -12,7 +12,8 @@ body {
   min-height: 100vh;
   background: #223243;
 }
-.container {
+.container,
+.profile {
   padding: 40px;
   border-radius: 20px;
   border: 8px solid #223243;
@@ -124,4 +125,34 @@ body {
 
 .container.signForm .form.signin {
   display: flex;
+}
+
+.profile .form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.profile .form h1 {
+  color: #fff;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-size: 1.5em;
+}
+
+.profile .form p {
+  color: #fff;
+  font-size: 1em;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.profile .form a {
+  color: #00dfc4;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 2em;
 }

@@ -1,57 +1,27 @@
-const bcrypt = require("bcrypt");
 const passport = require("passport");
 const router = require("express").Router();
-const User = require("../model/user");
-const joi = require("joi");
+const {
+  GetLogin,
+  GetProfile,
+  GetSign,
+  PostSign,
+  LogOut,
+} = require("../controllers/auth");
 
-router.get("/login", (req, res) => {
-  res.render("login");
-});
+router.get("/login", GetLogin);
+router.get("/", GetProfile);
+router.get("/signin", GetSign);
+router.get("/logout", LogOut);
 
+router.post("/signin", PostSign);
 router.post(
   "/login",
-  passport.authenticate("local", { failureRedirect: "/" }),
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+  }),
   function (req, res) {
-    res.redirect("/profile");
+    res.json({ status: "success" });
   }
 );
-
-router.get("/", async (req, res) => {
-  if (req.user) {
-    const user = await User.findOne({ username: req.user.username });
-    return res.render("profile", { user });
-  }
-  res.redirect("/login");
-});
-
-router.get("/signin", (req, res) => {
-  res.render("signin");
-});
-
-router.post("/signin", async (req, res) => {
-  console.log(req.body);
-  try {
-    const user = await User.findOne({ username: req.body.username });
-    if (user) {
-      return res.redirect("/");
-    }
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const newUser = new User({
-      username: req.body.username,
-      name: req.body.name,
-      password: hashedPassword,
-    });
-    await newUser.save();
-    res.redirect("/");
-  } catch {
-    res.redirect("/signin");
-  }
-});
-
-router.get("/logout", (req, res) => {
-  req.logout(() => {
-    res.redirect("/");
-  });
-});
 
 module.exports = router;
