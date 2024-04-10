@@ -5,15 +5,8 @@ const userSchema = new Schema({
   username: String,
   name: String,
   password: String,
-  cart: [
-    {
-      product: {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-      },
-      quantity: Number,
-    },
-  ],
+  email: String,
+  phone: String,
 });
 
 const User = mongoose.model("User", userSchema);
