@@ -15,10 +15,15 @@ const app = express();
 
 app.use(
   session({
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URL,
+    }),
     secret: "gfkjdngkjfdjndnfgnnkjnjnkjnkjj",
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URL }),
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+    },
   })
 );
 
