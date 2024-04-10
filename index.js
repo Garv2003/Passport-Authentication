@@ -55,4 +55,4 @@ mongoose.connect(process.env.MONGODB_URL).then(() => {
   });
 });
 
-module.exports = app;
+// module.exports = app;
