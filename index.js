@@ -13,11 +13,21 @@ dotenv.config();
 
 const app = express();
 
+const mongoClientPromise = new Promise((resolve) => {
+  mongoose.connection.on("connected", () => {
+    const client = mongoose.connection.getClient();
+    resolve(client);
+  });
+});
+
+const sessionStore = MongoStore.create({
+  clientPromise: mongoClientPromise,
+  collection: "sessions",
+});
+
 app.use(
   session({
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URL,
-    }),
+    store: sessionStore,
     secret: "gfkjdngkjfdjndnfgnnkjnjnkjnkjj",
     resave: false,
     saveUninitialized: false,
@@ -41,7 +51,7 @@ require("./passport/passport");
 app.use("/", auth);
 
 mongoose.connect(process.env.MONGODB_URL).then(() => {
-  app.listen(process.env.PORT, () => {
-    console.log(`server is running on port ${process.env.PORT}`);
+  app.listen(process.env.PORT || 3000, () => {
+    console.log("Server is running");
   });
 });
