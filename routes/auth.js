@@ -16,8 +16,12 @@ router.post(
   }
 );
 
-router.get("/", (req, res) => {
-  res.render("profile");
+router.get("/", async (req, res) => {
+  if (req.user) {
+    const user = await User.findOne({ username: req.user.username });
+    return res.render("profile", { user });
+  }
+  res.redirect("/login");
 });
 
 router.get("/signin", (req, res) => {
